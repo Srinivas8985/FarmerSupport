@@ -1,14 +1,33 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import AuthContext from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Marketplace() {
     const [products, setProducts] = useState([]);
+    const { token, user } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get("http://localhost:5000/api/products")
             .then(res => setProducts(res.data))
             .catch(err => console.error(err));
     }, []);
+
+    const handleBuy = async (productId) => {
+        if (!token) return navigate("/login");
+        if (user.role === 'farmer') return alert("Farmers cannot buy products.");
+
+        try {
+            await axios.post("http://localhost:5000/api/orders",
+                { productId },
+                { headers: { "auth-token": token } }
+            );
+            alert("Order placed successfully! Check your dashboard.");
+        } catch (err) {
+            alert("Order failed: " + (err.response?.data?.message || err.message));
+        }
+    };
 
     return (
         <div className="p-8 bg-gray-50 min-h-screen">
@@ -27,7 +46,10 @@ export default function Marketplace() {
                                 <span className="text-xl font-bold text-green-700">${product.price}</span>
                                 <span className="text-xs text-gray-500">By: {product.seller?.name || 'Unknown'}</span>
                             </div>
-                            <button className="w-full mt-4 bg-green-600 text-white py-2 rounded hover:bg-green-700">
+                            <button
+                                onClick={() => handleBuy(product._id)}
+                                className="w-full mt-4 bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+                            >
                                 Buy Now
                             </button>
                         </div>

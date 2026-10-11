@@ -18,6 +18,8 @@ const productRoutes = require('./routes/products');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/orders', require('./routes/orders'));
+app.use('/api/crop-health', require('./routes/cropHealth'));
 
 // Database Connection
 mongoose.connect(process.env.MONGO_URI)

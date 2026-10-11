@@ -17,6 +17,7 @@ export default function NavBar() {
         <ul className="hidden md:flex gap-8 text-lg items-center">
           <li><Link to="/" className="hover:text-yellow-300">Home</Link></li>
           <li><Link to="/marketplace" className="hover:text-yellow-300">Marketplace</Link></li>
+          <li><Link to="/crop-health" className="hover:text-yellow-300">Crop Health</Link></li>
 
           {user ? (
             <>
@@ -45,6 +46,7 @@ export default function NavBar() {
         <ul className="md:hidden bg-green-800 text-white flex flex-col gap-4 px-4 py-4">
           <li><Link to="/" onClick={() => setOpen(false)}>Home</Link></li>
           <li><Link to="/marketplace" onClick={() => setOpen(false)}>Marketplace</Link></li>
+          <li><Link to="/crop-health" onClick={() => setOpen(false)}>Crop Health</Link></li>
           {user ? (
             <li><Link to="/dashboard" onClick={() => setOpen(false)}>Dashboard</Link></li>
           ) : (
